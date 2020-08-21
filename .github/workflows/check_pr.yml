@@ -1,6 +1,6 @@
-name: CI
+name: Check PR
 
-on: [push]
+on: [pull_request]
 
 jobs:
   Macos:
