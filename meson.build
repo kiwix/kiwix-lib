@@ -77,15 +77,12 @@ subdir('test')
 
 pkg_requires = ['libzim', 'icu-i18n', 'pugixml', 'libcurl', 'libmicrohttpd', 'xapian-core']
 
-pkg_conf = configuration_data()
-pkg_conf.set('prefix', get_option('prefix'))
-pkg_conf.set('requires', ' '.join(pkg_requires))
-pkg_conf.set('extra_libs', ' '.join(extra_libs))
-pkg_conf.set('extra_cflags', extra_cflags)
-pkg_conf.set('version', meson.project_version())
-configure_file(output : 'kiwix.pc',
-               configuration : pkg_conf,
-               input : 'kiwix.pc.in',
-               install_dir: get_option('libdir')+'/pkgconfig'
-              )
-
+pkgconfig = import('pkgconfig')
+pkgconfig.generate(
+  kiwixlib,
+  name: 'kiwix',
+  description: 'A library that contains a lot of things used by used by other kiwix programs',
+  url: 'https://github.com/kiwix/kiwix-lib',
+  requires: pkg_requires + extra_libs,
+  extra_cflags: extra_cflags
+)
