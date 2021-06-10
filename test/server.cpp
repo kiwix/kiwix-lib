@@ -942,6 +942,15 @@ TEST_F(LibraryServerTest, catalog_v2_root)
     <id>12345678-90ab-cdef-1234-567890abcdef</id>
     <content type="text">List of all categories in this catalog.</content>
   </entry>
+  <entry>
+    <title>List of languages</title>
+    <link rel="subsection"
+          href="/catalog/v2/languages"
+          type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+    <content type="text">List of all languages in this catalog.</content>
+  </entry>
 </feed>
 )";
   EXPECT_EQ(maskVariableOPDSFeedData(r->body), expected_output);

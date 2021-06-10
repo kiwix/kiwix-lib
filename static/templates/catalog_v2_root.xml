@@ -32,4 +32,13 @@
     <id>{{category_list_feed_id}}</id>
     <content type="text">List of all categories in this catalog.</content>
   </entry>
+  <entry>
+    <title>List of languages</title>
+    <link rel="subsection"
+          href="{{endpoint_root}}/languages"
+          type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+    <updated>{{date}}</updated>
+    <id>{{language_list_feed_id}}</id>
+    <content type="text">List of all languages in this catalog.</content>
+  </entry>
 </feed>
