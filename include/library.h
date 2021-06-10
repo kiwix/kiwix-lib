@@ -341,7 +341,11 @@ class Library
   friend class OPDSDumper;
   friend class libXMLDumper;
 
+private: // types
+  typedef const std::string& (Book::*BookStrPropMemFn)() const;
+
 private: // functions
+  std::vector<std::string> getBookPropValueSet(BookStrPropMemFn p) const;
   BookIdCollection filterViaBookDB(const Filter& filter) const;
   void updateBookDB(const Book& book);
 };

@@ -275,9 +275,25 @@ TEST_F(LibraryTest, getBookMarksTest)
 TEST_F(LibraryTest, sanityCheck)
 {
   EXPECT_EQ(lib.getBookCount(true, true), 12U);
-  EXPECT_EQ(lib.getBooksLanguages().size(), 3U);
-  EXPECT_EQ(lib.getBooksCreators().size(), 9U);
-  EXPECT_EQ(lib.getBooksPublishers().size(), 3U);
+  EXPECT_EQ(lib.getBooksLanguages(),
+            std::vector<std::string>({"deu", "eng", "fra"})
+  );
+  EXPECT_EQ(lib.getBooksCreators(), std::vector<std::string>({
+      "Islam Stack Exchange",
+      "Movies & TV Stack Exchange",
+      "Mythology & Folklore Stack Exchange",
+      "TED",
+      "Tania Louis",
+      "Wiki",
+      "Wikibooks",
+      "Wikipedia",
+      "Wikiquote"
+  }));
+  EXPECT_EQ(lib.getBooksPublishers(), std::vector<std::string>({
+      "",
+      "Kiwix",
+      "Kiwix & Some Enthusiasts"
+  }));
 }
 
 TEST_F(LibraryTest, categoryHandling)
