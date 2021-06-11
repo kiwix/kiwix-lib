@@ -77,6 +77,7 @@ class InternalServer {
     std::unique_ptr<Response> handle_catalog_v2_root(const RequestContext& request);
     std::unique_ptr<Response> handle_catalog_v2_entries(const RequestContext& request);
     std::unique_ptr<Response> handle_catalog_v2_categories(const RequestContext& request);
+    std::unique_ptr<Response> handle_catalog_v2_languages(const RequestContext& request);
     std::unique_ptr<Response> handle_meta(const RequestContext& request);
     std::unique_ptr<Response> handle_search(const RequestContext& request);
     std::unique_ptr<Response> handle_suggest(const RequestContext& request);

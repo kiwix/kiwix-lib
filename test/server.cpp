@@ -1014,6 +1014,55 @@ TEST_F(LibraryServerTest, catalog_v2_categories)
   EXPECT_EQ(maskVariableOPDSFeedData(r->body), expected_output);
 }
 
+TEST_F(LibraryServerTest, catalog_v2_languages)
+{
+  const auto r = zfs1_->GET("/catalog/v2/languages");
+  EXPECT_EQ(r->status, 200);
+  const char expected_output[] = R"(<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:opds="https://specs.opds.io/opds-1.2">
+  <id>12345678-90ab-cdef-1234-567890abcdef</id>
+  <link rel="self"
+        href="/catalog/v2/languages"
+        type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <link rel="start"
+        href="/catalog/v2/root.xml"
+        type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <title>List of languages</title>
+  <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+
+  <entry>
+    <title>English</title>
+    <link rel="subsection"
+          href="/catalog/v2/entries?lang=eng"
+          type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+    <content type="text">All entries in English.</content>
+  </entry>
+  <entry>
+    <title>Français</title>
+    <link rel="subsection"
+          href="/catalog/v2/entries?lang=fra"
+          type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+    <content type="text">All entries in French.</content>
+  </entry>
+  <entry>
+    <title>Русский</title>
+    <link rel="subsection"
+          href="/catalog/v2/entries?lang=rus"
+          type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+    <content type="text">All entries in Russian.</content>
+  </entry>
+</feed>
+)";
+  EXPECT_EQ(maskVariableOPDSFeedData(r->body), expected_output);
+}
+
 #define CATALOG_V2_ENTRIES_PREAMBLE(q)                        \
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"            \
     "<feed xmlns=\"http://www.w3.org/2005/Atom\"\n"           \

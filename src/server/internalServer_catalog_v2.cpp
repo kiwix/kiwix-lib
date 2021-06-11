@@ -59,6 +59,8 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2(const RequestContext
     return handle_catalog_v2_entries(request);
   } else if (url == "categories") {
     return handle_catalog_v2_categories(request);
+  } else if (url == "languages") {
+    return handle_catalog_v2_languages(request);
   } else {
     return Response::build_404(*this, request, "", "");
   }
@@ -103,6 +105,18 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2_categories(const Req
   return ContentResponse::build(
              *this,
              opdsDumper.categoriesOPDSFeed(mp_library->getBooksCategories()),
+             "application/atom+xml;profile=opds-catalog;kind=navigation"
+  );
+}
+
+std::unique_ptr<Response> InternalServer::handle_catalog_v2_languages(const RequestContext& request)
+{
+  OPDSDumper opdsDumper(mp_library);
+  opdsDumper.setRootLocation(m_root);
+  opdsDumper.setLibraryId(m_library_id);
+  return ContentResponse::build(
+             *this,
+             opdsDumper.languagesOPDSFeed(mp_library->getBooksLanguages()),
              "application/atom+xml;profile=opds-catalog;kind=navigation"
   );
 }

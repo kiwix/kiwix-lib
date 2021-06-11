@@ -22,6 +22,7 @@
 
 #include "kiwixlib-resources.h"
 #include <mustache.hpp>
+#include <unicode/locid.h>
 
 #include "tools/stringTools.h"
 #include "tools/otherTools.h"
@@ -83,6 +84,24 @@ BookData getBookData(const Library* library, const std::vector<std::string>& boo
   return bookData;
 }
 
+struct LangInfo {
+  std::string selfName, englishName;
+};
+
+std::map<std::string, LangInfo> langMap = {
+      {"eng", { "English",  "English"} },
+      {"fra", { "Français", "French"} },
+      {"rus", { "Русский",  "Russian"} },
+};
+
+std::string getLanguageSelfName(const std::string& lang) {
+  return langMap.at(lang).selfName;
+};
+
+std::string getLanguageEnglishName(const std::string& lang) {
+  return langMap.at(lang).englishName;
+};
+
 } // unnamed namespace
 
 string OPDSDumper::dumpOPDSFeed(const std::vector<std::string>& bookIds, const std::string& query) const
@@ -142,6 +161,33 @@ std::string OPDSDumper::categoriesOPDSFeed(const std::vector<std::string>& categ
                {"endpoint_root", rootLocation + "/catalog/v2"},
                {"feed_id", gen_uuid(libraryId + "/categories")},
                {"categories", categoryData }
+             }
+  );
+}
+
+std::string OPDSDumper::languagesOPDSFeed(const std::vector<std::string>& languages) const
+{
+  const auto now = gen_date_str();
+  kainjow::mustache::list languageData;
+  for ( const auto& languageCode : languages ) {
+    const auto languageSelfName = getLanguageSelfName(languageCode);
+    const auto languageEnglishName = getLanguageEnglishName(languageCode);
+    languageData.push_back(kainjow::mustache::object{
+      {"lang_code",  languageCode},
+      {"lang_self_name", languageSelfName},
+      {"lang_english_name", languageEnglishName},
+      {"updated", now},
+      {"id", gen_uuid(libraryId + "/languages/" + languageCode)}
+    });
+  }
+
+  return render_template(
+             RESOURCE::templates::catalog_v2_languages_xml,
+             kainjow::mustache::object{
+               {"date", now},
+               {"endpoint_root", rootLocation + "/catalog/v2"},
+               {"feed_id", gen_uuid(libraryId + "/languages")},
+               {"languages", languageData }
              }
   );
 }
