@@ -617,10 +617,10 @@ std::string maskVariableOPDSFeedData(std::string s)
     "  <entry>\n"                                                       \
     "    <id>urn:uuid:charlesray</id>\n"                                \
     "    <title>Charles, Ray</title>\n"                                 \
-    "    <summary>Wikipedia articles about Ray Charles</summary>\n"    \
-    "    <language>eng</language>\n"                                    \
+    "    <summary>Wikipedia articles about Ray Charles</summary>\n"     \
+    "    <language>fra</language>\n"                                    \
     "    <updated>YYYY-MM-DDThh:mm:ssZ</updated>\n"                     \
-    "    <name>wikipedia_en_ray_charles</name>\n"                       \
+    "    <name>wikipedia_fr_ray_charles</name>\n"                       \
     "    <flavour></flavour>\n"                                         \
     "    <category>jazz</category>\n"                                   \
     "    <tags>unittest;wikipedia;_category:jazz;_pictures:no;_videos:no;_details:no;_ftindex:yes</tags>\n" \
@@ -666,9 +666,9 @@ std::string maskVariableOPDSFeedData(std::string s)
     "    <id>urn:uuid:raycharles_uncategorized</id>\n"                  \
     "    <title>Ray (uncategorized) Charles</title>\n"                  \
     "    <summary>No category is assigned to this library entry.</summary>\n" \
-    "    <language>eng</language>\n"                                    \
+    "    <language>rus</language>\n"                                    \
     "    <updated>YYYY-MM-DDThh:mm:ssZ</updated>\n"                     \
-    "    <name>wikipedia_en_ray_charles</name>\n"                       \
+    "    <name>wikipedia_ru_ray_charles</name>\n"                       \
     "    <flavour></flavour>\n"                                         \
     "    <category></category>\n"                                \
     "    <tags>unittest;wikipedia;_pictures:no;_videos:no;_details:no</tags>\n" \
