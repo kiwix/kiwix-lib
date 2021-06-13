@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="https://specs.opds.io/opds-1.2">
   <id>{{feed_id}}</id>
   <link rel="self"
@@ -14,6 +15,7 @@
   {{#languages}}
   <entry>
     <title>{{lang_self_name}}</title>
+    <dc:language>{{{lang_code}}}</dc:language>
     <link rel="subsection"
           href="{{endpoint_root}}/entries?lang={{{lang_code}}}"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>

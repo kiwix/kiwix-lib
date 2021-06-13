@@ -1020,6 +1020,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
   EXPECT_EQ(r->status, 200);
   const char expected_output[] = R"(<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
       xmlns:opds="https://specs.opds.io/opds-1.2">
   <id>12345678-90ab-cdef-1234-567890abcdef</id>
   <link rel="self"
@@ -1033,6 +1034,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
 
   <entry>
     <title>English</title>
+    <dc:language>eng</dc:language>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=eng"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
@@ -1042,6 +1044,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
   </entry>
   <entry>
     <title>Français</title>
+    <dc:language>fra</dc:language>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=fra"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
@@ -1051,6 +1054,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
   </entry>
   <entry>
     <title>Русский</title>
+    <dc:language>rus</dc:language>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=rus"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
