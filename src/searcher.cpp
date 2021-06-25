@@ -36,6 +36,7 @@ class _Result : public Result
 {
  public:
   _Result(zim::SearchResultSet::iterator iterator);
+  _Result(zim::SuggestionResultSet::iterator iterator);
   virtual ~_Result(){};
 
   virtual std::string get_url();
@@ -47,8 +48,12 @@ class _Result : public Result
   virtual int get_size();
   virtual std::string get_zimId();
 
+  bool isSuggestion() { return suggestionMode; }
+
  private:
   zim::SearchResultSet::iterator iterator;
+  zim::SuggestionResultSet::iterator suggestionIterator;
+  bool suggestionMode;
 };
 
 struct SearcherInternal : zim::SearchResultSet {
@@ -59,6 +64,15 @@ struct SearcherInternal : zim::SearchResultSet {
   }
 
   zim::SearchResultSet::iterator current_iterator;
+};
+
+struct SuggestionInternal : zim::SuggestionResultSet {
+  explicit SuggestionInternal(const zim::SuggestionResultSet& suggestionResultSet)
+  : zim::SuggestionResultSet(suggestionResultSet),
+    current_iterator(suggestionResultSet.begin())
+  {}
+
+  zim::SuggestionResultSet::iterator current_iterator;
 };
 
 /* Constructor */
@@ -119,7 +133,7 @@ void Searcher::search(const std::string& search,
     }
     zim::Searcher searcher(archives);
     zim::Query query;
-    query.setQuery(unaccentedSearch, false);
+    query.setQuery(unaccentedSearch);
     query.setVerbose(verbose);
     zim::Search search = searcher.search(query);
     internal.reset(new SearcherInternal(search.getResults(resultStart, resultEnd)));
@@ -161,7 +175,7 @@ void Searcher::geo_search(float latitude, float longitude, float distance,
   zim::Searcher searcher(archives);
   zim::Query query;
   query.setVerbose(verbose);
-  query.setQuery("", false);
+  query.setQuery("");
   query.setGeorange(latitude, longitude, distance);
   zim::Search search = searcher.search(query);
   internal.reset(new SearcherInternal(search.getResults(resultStart, resultEnd)));
@@ -213,13 +227,15 @@ void Searcher::suggestions(std::string& searchPattern, const bool verbose)
        current++) {
     archives.push_back(*(*current)->getZimArchive());
   }
-  zim::Searcher searcher(archives);
+
+  // MULTIZIM SUGGESTION IS NOT SUPPORTED CURRENTLY! Taking only the first archive.
+  zim::SuggestionSearcher suggestionSearcher(archives[0]);
   zim::Query query;
   query.setVerbose(verbose);
-  query.setQuery(unaccentedSearch, true);
-  zim::Search search = searcher.search(query);
-  internal.reset(new SearcherInternal(search.getResults(resultStart, resultEnd)));
-  this->estimatedResultCount = search.getEstimatedMatches();
+  query.setQuery(unaccentedSearch);
+  zim::SuggestionSearch suggestionSearch = suggestionSearcher.suggest(query);
+  suggestionInternal.reset(new SuggestionInternal(suggestionSearch.getResults(resultStart, resultEnd)));
+  this->estimatedResultCount = suggestionSearch.getEstimatedMatches();
 }
 
 /* Return the result count estimation */
@@ -229,40 +245,78 @@ unsigned int Searcher::getEstimatedResultCount()
 }
 
 _Result::_Result(zim::SearchResultSet::iterator iterator)
-    : iterator(iterator)
+    : iterator(iterator),
+      suggestionMode(false)
 {
 }
 
+_Result::_Result(zim::SuggestionResultSet::iterator suggestionIterator)
+    : suggestionIterator(suggestionIterator),
+      suggestionMode(true)
+{
+}
+
+/**
+ * Some fo the following getFoo methods are not applicable for suggestion results
+ * as of now due to the separate libzim API and simple nature of its dereference,
+ * but the methods are not altered here in libkiwix for compatibility and for the
+ * reason of enforcing dropping the usage of wrapper structures like _Result soon.
+ **/
+
 std::string _Result::get_url()
 {
+  if (suggestionMode) {
+    return suggestionIterator->getPath();
+  }
   return iterator.getPath();
 }
 std::string _Result::get_title()
 {
+  if (suggestionMode) {
+    return suggestionIterator->getTitle();
+  }
   return iterator.getTitle();
 }
 int _Result::get_score()
 {
+  if (suggestionMode) {
+    return 0;
+  }
   return iterator.getScore();
 }
 std::string _Result::get_snippet()
 {
+  if (suggestionMode) {
+    return suggestionIterator->getSnippet();
+  }
   return iterator.getSnippet();
 }
 std::string _Result::get_content()
 {
+  if (suggestionMode) {
+    return "";
+  }
   return iterator->getItem(true).getData();
 }
 int _Result::get_size()
 {
+  if (suggestionMode) {
+    return 0;
+  }
   return iterator.getSize();
 }
 int _Result::get_wordCount()
 {
+  if (suggestionMode) {
+    return 0;
+  }
   return iterator.getWordCount();
 }
 std::string _Result::get_zimId()
 {
+  if (suggestionMode) {
+    return "";
+  }
   std::ostringstream s;
   s << iterator.getZimId();
   return s.str();
