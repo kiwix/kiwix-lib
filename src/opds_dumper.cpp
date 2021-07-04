@@ -84,22 +84,22 @@ BookData getBookData(const Library* library, const std::vector<std::string>& boo
   return bookData;
 }
 
-struct LangInfo {
-  std::string selfName, englishName;
-};
-
-std::map<std::string, LangInfo> langMap = {
-      {"eng", { "English",  "English"} },
-      {"fra", { "Français", "French"} },
-      {"rus", { "Русский",  "Russian"} },
-};
-
 std::string getLanguageSelfName(const std::string& lang) {
-  return langMap.at(lang).selfName;
+  const icu::Locale locale(lang.c_str());
+  icu::UnicodeString ustring;
+  locale.getDisplayLanguage(locale, ustring);
+  std::string result;
+  ustring.toUTF8String(result);
+  return result;
 };
 
 std::string getLanguageEnglishName(const std::string& lang) {
-  return langMap.at(lang).englishName;
+  const icu::Locale locale(lang.c_str());
+  icu::UnicodeString ustring;
+  locale.getDisplayLanguage(icu::Locale("en"), ustring);
+  std::string result;
+  ustring.toUTF8String(result);
+  return result;
 };
 
 } // unnamed namespace

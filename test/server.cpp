@@ -1043,7 +1043,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
     <content type="text">All entries in English.</content>
   </entry>
   <entry>
-    <title>Français</title>
+    <title>français</title>
     <dc:language>fra</dc:language>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=fra"
@@ -1053,7 +1053,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
     <content type="text">All entries in French.</content>
   </entry>
   <entry>
-    <title>Русский</title>
+    <title>русский</title>
     <dc:language>rus</dc:language>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=rus"
