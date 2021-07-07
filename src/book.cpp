@@ -29,6 +29,8 @@
 #include "tools/pathTools.h"
 #include "tools/archiveTools.h"
 
+#include <zim/archive.h>
+
 #include <pugixml.hpp>
 
 namespace kiwix
@@ -98,7 +100,6 @@ void Book::update(const zim::Archive& archive) {
   m_flavour = getMetaFlavour(archive);
   m_tags = getMetaTags(archive);
   m_category = getCategoryFromTags();
-  m_origId = getArchiveOrigId(archive);
   m_articleCount = archive.getArticleCount();
   m_mediaCount = getArchiveMediaCount(archive);
   m_size = static_cast<uint64_t>(getArchiveFileSize(archive)) << 10;

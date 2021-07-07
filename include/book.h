@@ -21,10 +21,13 @@
 #define KIWIX_BOOK_H
 
 #include <string>
-#include <zim/archive.h>
 
 namespace pugi {
 class xml_node;
+}
+
+namespace zim {
+class Archive;
 }
 
 namespace kiwix
