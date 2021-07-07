@@ -197,6 +197,7 @@ const ResourceCollection resources200Uncompressible{
   { WITH_ETAG, "/meta?content=zimfile&name=creator" },
   { WITH_ETAG, "/meta?content=zimfile&name=publisher" },
   { WITH_ETAG, "/meta?content=zimfile&name=favicon" },
+  { WITH_ETAG, "/meta?content=zimfile&name=Illustration_48x48@1" },
 
   { WITH_ETAG, "/zimfile/I/m/Ray_Charles_classic_piano_pose.jpg" },
 
