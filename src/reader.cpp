@@ -238,11 +238,6 @@ string Reader::getScraper() const
 }
 #undef METADATA
 
-string Reader::getOrigId() const
-{
-  return kiwix::getArchiveOrigId(*zimArchive);
-}
-
 Entry Reader::getEntryFromPath(const std::string& path) const
 {
   try {

@@ -94,32 +94,7 @@ std::string getMetaFlavour(const zim::Archive& archive) {
 }
 
 std::string getArchiveId(const zim::Archive& archive) {
-  std::ostringstream s;
-  s << archive.getUuid();
-  return s.str();
-}
-
-std::string getArchiveOrigId(const zim::Archive& archive) {
-  std::string value = getMetadata(archive, "startfileuid");
-  if (value.empty()) {
-    return "";
-  }
-  std::string id = value;
-  std::string origID;
-  std::string temp = "";
-  unsigned int k = 0;
-  char tempArray[16] = "";
-  for (unsigned int i = 0; i < id.size(); i++) {
-    if (id[i] == '\n') {
-      tempArray[k] = atoi(temp.c_str());
-      temp = "";
-      k++;
-    } else {
-      temp += id[i];
-    }
-  }
-  origID = (std::string) zim::Uuid::generate(tempArray);
-  return origID;
+  return (std::string) archive.getUuid();
 }
 
 bool getArchiveFavicon(const zim::Archive& archive,

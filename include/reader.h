@@ -293,16 +293,6 @@ class Reader
   string getScraper() const;
 
   /**
-   * Get the origId of the zim file.
-   *
-   * The origId is only used in the case of patch zim file and is the Id
-   * of the original zim file.
-   *
-   * @return The origId of the zim file as specified in the zim metadata.
-   */
-  string getOrigId() const;
-
-  /**
    * Get the favicon of the zim file.
    *
    * @param[out] content The content of the favicon.
