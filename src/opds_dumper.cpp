@@ -61,6 +61,7 @@ IllustrationInfo getBookIllustrationInfo(const Book& book)
         illustrations.push_back(kainjow::mustache::object{
           {"icon_width", to_string(illustration_size)},
           {"icon_height", to_string(illustration_size)},
+          {"icon_scale", "1"},
         });
       }
     }

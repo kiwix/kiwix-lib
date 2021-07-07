@@ -36,8 +36,8 @@
     <mediaCount>{{media_count}}</mediaCount>
     {{#icons}}
     <link rel="http://opds-spec.org/image/thumbnail"
-          href="/meta?name=Illustration_{{icon_width}}x{{icon_height}}&amp;content={{{content_id}}}"
-          type="image/png;width={{icon_width}};height={{icon_height}}"/>
+          href="/meta?name=Illustration_{{icon_width}}x{{icon_height}}@{{icon_scale}}&amp;content={{{content_id}}}"
+          type="image/png;width={{icon_width}};height={{icon_height}};scale={{icon_scale}}"/>
     {{/icons}}
     <link type="text/html" href="/{{{content_id}}}" />
     <author>
