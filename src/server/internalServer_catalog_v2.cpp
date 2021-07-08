@@ -104,7 +104,7 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2_categories(const Req
   opdsDumper.setLibraryId(m_library_id);
   return ContentResponse::build(
              *this,
-             opdsDumper.categoriesOPDSFeed(mp_library->getBooksCategories()),
+             opdsDumper.categoriesOPDSFeed(),
              "application/atom+xml;profile=opds-catalog;kind=navigation"
   );
 }

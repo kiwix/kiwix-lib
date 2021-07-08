@@ -66,10 +66,9 @@ class OPDSDumper
   /**
    * Dump the categories OPDS feed.
    *
-   * @param categories list of category names
    * @return The OPDS feed.
    */
-  std::string categoriesOPDSFeed(const std::vector<std::string>& categories) const;
+  std::string categoriesOPDSFeed() const;
 
   /**
    * Dump the languages OPDS feed.
