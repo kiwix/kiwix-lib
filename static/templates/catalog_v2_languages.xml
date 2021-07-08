@@ -21,7 +21,6 @@
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
     <updated>{{updated}}</updated>
     <id>{{id}}</id>
-    <content type="text">All entries in {{lang_english_name}}.</content>
   </entry>
   {{/languages}}
 </feed>

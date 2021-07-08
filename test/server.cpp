@@ -1040,7 +1040,6 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
     <updated>YYYY-MM-DDThh:mm:ssZ</updated>
     <id>12345678-90ab-cdef-1234-567890abcdef</id>
-    <content type="text">All entries in English.</content>
   </entry>
   <entry>
     <title>français</title>
@@ -1050,7 +1049,6 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
     <updated>YYYY-MM-DDThh:mm:ssZ</updated>
     <id>12345678-90ab-cdef-1234-567890abcdef</id>
-    <content type="text">All entries in French.</content>
   </entry>
   <entry>
     <title>русский</title>
@@ -1060,7 +1058,6 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
     <updated>YYYY-MM-DDThh:mm:ssZ</updated>
     <id>12345678-90ab-cdef-1234-567890abcdef</id>
-    <content type="text">All entries in Russian.</content>
   </entry>
 </feed>
 )";

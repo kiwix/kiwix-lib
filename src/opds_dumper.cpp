@@ -93,15 +93,6 @@ std::string getLanguageSelfName(const std::string& lang) {
   return result;
 };
 
-std::string getLanguageEnglishName(const std::string& lang) {
-  const icu::Locale locale(lang.c_str());
-  icu::UnicodeString ustring;
-  locale.getDisplayLanguage(icu::Locale("en"), ustring);
-  std::string result;
-  ustring.toUTF8String(result);
-  return result;
-};
-
 } // unnamed namespace
 
 string OPDSDumper::dumpOPDSFeed(const std::vector<std::string>& bookIds, const std::string& query) const
@@ -171,11 +162,9 @@ std::string OPDSDumper::languagesOPDSFeed() const
   kainjow::mustache::list languageData;
   for ( const auto& languageCode : library->getBooksLanguages() ) {
     const auto languageSelfName = getLanguageSelfName(languageCode);
-    const auto languageEnglishName = getLanguageEnglishName(languageCode);
     languageData.push_back(kainjow::mustache::object{
       {"lang_code",  languageCode},
       {"lang_self_name", languageSelfName},
-      {"lang_english_name", languageEnglishName},
       {"updated", now},
       {"id", gen_uuid(libraryId + "/languages/" + languageCode)}
     });
