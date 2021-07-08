@@ -116,7 +116,7 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2_languages(const Requ
   opdsDumper.setLibraryId(m_library_id);
   return ContentResponse::build(
              *this,
-             opdsDumper.languagesOPDSFeed(mp_library->getBooksLanguages()),
+             opdsDumper.languagesOPDSFeed(),
              "application/atom+xml;profile=opds-catalog;kind=navigation"
   );
 }

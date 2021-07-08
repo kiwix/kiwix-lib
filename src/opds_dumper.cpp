@@ -165,11 +165,11 @@ std::string OPDSDumper::categoriesOPDSFeed(const std::vector<std::string>& categ
   );
 }
 
-std::string OPDSDumper::languagesOPDSFeed(const std::vector<std::string>& languages) const
+std::string OPDSDumper::languagesOPDSFeed() const
 {
   const auto now = gen_date_str();
   kainjow::mustache::list languageData;
-  for ( const auto& languageCode : languages ) {
+  for ( const auto& languageCode : library->getBooksLanguages() ) {
     const auto languageSelfName = getLanguageSelfName(languageCode);
     const auto languageEnglishName = getLanguageEnglishName(languageCode);
     languageData.push_back(kainjow::mustache::object{
