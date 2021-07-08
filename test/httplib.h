@@ -2890,12 +2890,15 @@ inline ssize_t Stream::write(const std::string &s) {
 template <typename... Args>
 inline ssize_t Stream::write_format(const char *fmt, const Args &... args) {
   std::array<char, 2048> buf;
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #if defined(_MSC_VER) && _MSC_VER < 1900
   auto sn = _snprintf_s(buf, bufsiz, buf.size() - 1, fmt, args...);
 #else
   auto sn = snprintf(buf.data(), buf.size() - 1, fmt, args...);
 #endif
+#pragma GCC diagnostic pop
   if (sn <= 0) { return sn; }
 
   auto n = static_cast<size_t>(sn);
@@ -3651,7 +3654,11 @@ Server::process_request(Stream &strm, bool last_connection,
                         const std::function<void(Request &)> &setup_request) {
   std::array<char, 2048> buf{};
 
-  detail::stream_line_reader line_reader(strm, buf.data(), buf.size());
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+   detail::stream_line_reader line_reader(strm, buf.data(), buf.size());
+#pragma GCC diagnostic pop
 
   // Connection has been closed on client
   if (!line_reader.getline()) { return false; }
@@ -3757,9 +3764,11 @@ inline socket_t Client::create_client_socket() const {
 
 inline bool Client::read_response_line(Stream &strm, Response &res) {
   std::array<char, 2048> buf;
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
   detail::stream_line_reader line_reader(strm, buf.data(), buf.size());
-
+#pragma GCC diagnostic pop
   if (!line_reader.getline()) { return false; }
 
   const static std::regex re("(HTTP/1\\.[01]) (\\d+?) .*\r\n");
