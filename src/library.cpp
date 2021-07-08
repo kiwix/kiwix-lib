@@ -208,23 +208,36 @@ bool Library::writeBookmarksToFile(const std::string& path) const
   return writeTextFile(path, dumper.dumpLibXMLBookmark());
 }
 
-std::vector<std::string> Library::getBookPropValueSet(BookStrPropMemFn p) const
+Library::AttributeCounts Library::getBookAttributeCounts(BookStrPropMemFn p) const
 {
-  std::set<std::string> propValues;
+  AttributeCounts propValueCounts;
 
   for (const auto& pair: m_books) {
     const auto& book = pair.second;
     if (book.getOrigId().empty()) {
-      propValues.insert((book.*p)());
+      propValueCounts[(book.*p)()] += 1;
     }
   }
+  return propValueCounts;
+}
 
-  return std::vector<std::string>(propValues.begin(), propValues.end());
+std::vector<std::string> Library::getBookPropValueSet(BookStrPropMemFn p) const
+{
+  std::vector<std::string> result;
+  for ( const auto& kv : getBookAttributeCounts(p) ) {
+    result.push_back(kv.first);
+  }
+  return result;
 }
 
 std::vector<std::string> Library::getBooksLanguages() const
 {
   return getBookPropValueSet(&Book::getLanguage);
+}
+
+Library::AttributeCounts Library::getBooksLanguagesWithCounts() const
+{
+  return getBookAttributeCounts(&Book::getLanguage);
 }
 
 std::vector<std::string> Library::getBooksCategories() const

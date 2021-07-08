@@ -1035,6 +1035,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
   <entry>
     <title>English</title>
     <dc:language>eng</dc:language>
+    <thr:count>1</thr:count>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=eng"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
@@ -1044,6 +1045,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
   <entry>
     <title>français</title>
     <dc:language>fra</dc:language>
+    <thr:count>1</thr:count>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=fra"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
@@ -1053,6 +1055,7 @@ TEST_F(LibraryServerTest, catalog_v2_languages)
   <entry>
     <title>русский</title>
     <dc:language>rus</dc:language>
+    <thr:count>1</thr:count>
     <link rel="subsection"
           href="/catalog/v2/entries?lang=rus"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>

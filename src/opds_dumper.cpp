@@ -160,11 +160,14 @@ std::string OPDSDumper::languagesOPDSFeed() const
 {
   const auto now = gen_date_str();
   kainjow::mustache::list languageData;
-  for ( const auto& languageCode : library->getBooksLanguages() ) {
+  for ( const auto& langAndBookCount : library->getBooksLanguagesWithCounts() ) {
+    const std::string languageCode = langAndBookCount.first;
+    const int bookCount = langAndBookCount.second;
     const auto languageSelfName = getLanguageSelfName(languageCode);
     languageData.push_back(kainjow::mustache::object{
       {"lang_code",  languageCode},
       {"lang_self_name", languageSelfName},
+      {"book_count", to_string(bookCount)},
       {"updated", now},
       {"id", gen_uuid(libraryId + "/languages/" + languageCode)}
     });

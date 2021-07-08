@@ -16,6 +16,7 @@
   <entry>
     <title>{{lang_self_name}}</title>
     <dc:language>{{{lang_code}}}</dc:language>
+    <thr:count>{{book_count}}</thr:count>
     <link rel="subsection"
           href="{{endpoint_root}}/entries?lang={{{lang_code}}}"
           type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
