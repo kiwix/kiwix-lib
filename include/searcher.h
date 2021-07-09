@@ -52,6 +52,7 @@ class Result
 };
 
 struct SearcherInternal;
+struct SuggestionInternal;
 /**
  * The Searcher class is reponsible to do different kind of search using the
  * fulltext index.
@@ -160,6 +161,7 @@ class Searcher
 
   std::vector<Reader*> readers;
   std::unique_ptr<SearcherInternal> internal;
+  std::unique_ptr<SuggestionInternal> suggestionInternal;
   std::string searchPattern;
   unsigned int estimatedResultCount;
   unsigned int resultStart;

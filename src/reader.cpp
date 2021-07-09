@@ -463,18 +463,18 @@ bool Reader::searchSuggestionsSmart(const string& prefix,
 
   /* Try to search in the title using fulltext search database */
 
-  auto suggestionSearcher = zim::Searcher(*zimArchive);
+  auto suggestionSearcher = zim::SuggestionSearcher(*zimArchive);
   zim::Query suggestionQuery;
-  suggestionQuery.setQuery(prefix, true);
-  auto suggestionSearch = suggestionSearcher.search(suggestionQuery);
+  suggestionQuery.setQuery(prefix);
+  auto suggestionSearch = suggestionSearcher.suggest(suggestionQuery);
 
   if (suggestionSearch.getEstimatedMatches()) {
     const auto suggestions = suggestionSearch.getResults(0, suggestionsCount);
     for (auto current = suggestions.begin();
          current != suggestions.end();
          current++) {
-      SuggestionItem suggestion(current.getTitle(), kiwix::normalize(current.getTitle()),
-                                current.getPath(), current.getSnippet());
+      SuggestionItem suggestion(current->getTitle(), kiwix::normalize(current->getTitle()),
+                                current->getPath(), current->getSnippet());
       results.push_back(suggestion);
     }
     retVal = true;
