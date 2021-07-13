@@ -34,7 +34,11 @@
     <tags>{{tags}}</tags>
     <articleCount>{{article_count}}</articleCount>
     <mediaCount>{{media_count}}</mediaCount>
-    <icon>/meta?name=favicon&amp;content={{{content_id}}}</icon>
+    {{#icons}}
+    <link rel="http://opds-spec.org/image/thumbnail"
+          href="/meta?name=Illustration_{{icon_width}}x{{icon_height}}@{{icon_scale}}&amp;content={{{content_id}}}"
+          type="image/png;width={{icon_width}};height={{icon_height}};scale={{icon_scale}}"/>
+    {{/icons}}
     <link type="text/html" href="/{{{content_id}}}" />
     <author>
       <name>{{author_name}}</name>

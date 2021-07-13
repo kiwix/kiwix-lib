@@ -33,7 +33,7 @@ namespace kiwix
     std::string getArchiveTitle(const zim::Archive& archive);
     std::string getMetaDescription(const zim::Archive& archive);
     std::string getMetaTags(const zim::Archive& archive, bool original = false);
-    bool getArchiveFavicon(const zim::Archive& archive,
+    bool getArchiveFavicon(const zim::Archive& archive, unsigned size,
                            std::string& content, std::string& mimeType);
     std::string getMetaLanguage(const zim::Archive& archive);
     std::string getMetaName(const zim::Archive& archive);

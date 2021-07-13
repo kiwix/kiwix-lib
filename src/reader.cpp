@@ -191,7 +191,7 @@ Entry Reader::getMainPage() const
 
 bool Reader::getFavicon(string& content, string& mimeType) const
 {
-  return kiwix::getArchiveFavicon(*zimArchive, content, mimeType);
+  return kiwix::getArchiveFavicon(*zimArchive, 48, content, mimeType);
 }
 
 string Reader::getZimFilePath() const

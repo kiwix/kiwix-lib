@@ -197,6 +197,7 @@ const ResourceCollection resources200Uncompressible{
   { WITH_ETAG, "/meta?content=zimfile&name=creator" },
   { WITH_ETAG, "/meta?content=zimfile&name=publisher" },
   { WITH_ETAG, "/meta?content=zimfile&name=favicon" },
+  { WITH_ETAG, "/meta?content=zimfile&name=Illustration_48x48@1" },
 
   { WITH_ETAG, "/zimfile/I/m/Ray_Charles_classic_piano_pose.jpg" },
 
@@ -626,7 +627,9 @@ std::string maskVariableOPDSFeedData(std::string s)
     "    <tags>unittest;wikipedia;_category:jazz;_pictures:no;_videos:no;_details:no;_ftindex:yes</tags>\n" \
     "    <articleCount>284</articleCount>\n"                            \
     "    <mediaCount>2</mediaCount>\n"                                  \
-    "    <icon>/meta?name=favicon&amp;content=zimfile</icon>\n"         \
+    "    <link rel=\"http://opds-spec.org/image/thumbnail\"\n"          \
+    "          href=\"/meta?name=Illustration_48x48@1&amp;content=zimfile\"\n" \
+    "          type=\"image/png;width=48;height=48;scale=1\"/>\n"               \
     "    <link type=\"text/html\" href=\"/zimfile\" />\n"               \
     "    <author>\n"                                                    \
     "      <name>Wikipedia</name>\n"                                    \
@@ -650,7 +653,9 @@ std::string maskVariableOPDSFeedData(std::string s)
     "    <tags>unittest;wikipedia;_category:wikipedia;_pictures:no;_videos:no;_details:no;_ftindex:yes</tags>\n" \
     "    <articleCount>284</articleCount>\n"                            \
     "    <mediaCount>2</mediaCount>\n"                                  \
-    "    <icon>/meta?name=favicon&amp;content=zimfile</icon>\n"         \
+    "    <link rel=\"http://opds-spec.org/image/thumbnail\"\n"          \
+    "          href=\"/meta?name=Illustration_48x48@1&amp;content=zimfile\"\n" \
+    "          type=\"image/png;width=48;height=48;scale=1\"/>\n"               \
     "    <link type=\"text/html\" href=\"/zimfile\" />\n"               \
     "    <author>\n"                                                    \
     "      <name>Wikipedia</name>\n"                                    \
@@ -674,7 +679,9 @@ std::string maskVariableOPDSFeedData(std::string s)
     "    <tags>unittest;wikipedia;_pictures:no;_videos:no;_details:no</tags>\n" \
     "    <articleCount>284</articleCount>\n"                            \
     "    <mediaCount>2</mediaCount>\n"                                  \
-    "    <icon>/meta?name=favicon&amp;content=zimfile</icon>\n"         \
+    "    <link rel=\"http://opds-spec.org/image/thumbnail\"\n"          \
+    "          href=\"/meta?name=Illustration_48x48@1&amp;content=zimfile\"\n" \
+    "          type=\"image/png;width=48;height=48;scale=1\"/>\n"               \
     "    <link type=\"text/html\" href=\"/zimfile\" />\n"               \
     "    <author>\n"                                                    \
     "      <name>Wikipedia</name>\n"                                    \

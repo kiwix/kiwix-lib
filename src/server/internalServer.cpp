@@ -94,6 +94,16 @@ inline std::string normalizeRootUrl(std::string rootUrl)
   return rootUrl.empty() ? rootUrl : "/" + rootUrl;
 }
 
+unsigned parseIllustration(const std::string& s)
+{
+  int nw(0), nh(0), nEnd(0);
+  long int w(-1), h(-1);
+  if ( sscanf(s.c_str(), "Illustration_%n%ldx%n%ld@1%n)", &nw, &w, &nh, &h, &nEnd) == 2
+     && nEnd == (int)s.size() && !isspace(s[nw]) && !isspace(s[nh]) && w == h && w >= 0) {
+    return w;
+  }
+  return 0;
+}
 } // unnamed namespace
 
 static IdNameMapper defaultNameMapper;
@@ -408,7 +418,9 @@ std::unique_ptr<Response> InternalServer::handle_meta(const RequestContext& requ
   } else if (meta_name == "publisher") {
     content = getMetaPublisher(*archive);
   } else if (meta_name == "favicon") {
-    getArchiveFavicon(*archive, content, mimeType);
+    getArchiveFavicon(*archive, 48, content, mimeType);
+  } else if (const unsigned illustrationSize = parseIllustration(meta_name)) {
+    getArchiveFavicon(*archive, illustrationSize, content, mimeType);
   } else {
     return Response::build_404(*this, request, bookName, "");
   }

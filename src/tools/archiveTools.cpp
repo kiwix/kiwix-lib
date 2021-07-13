@@ -69,10 +69,10 @@ std::string getMetaTags(const zim::Archive& archive, bool original) {
   return join(tags, ";");
 }
 
-bool getArchiveFavicon(const zim::Archive& archive,
+bool getArchiveFavicon(const zim::Archive& archive, unsigned size,
                            std::string& content, std::string& mimeType){
   try {
-    auto item = archive.getIllustrationItem();
+    auto item = archive.getIllustrationItem(size);
     content = item.getData();
     mimeType = item.getMimetype();
     return true;

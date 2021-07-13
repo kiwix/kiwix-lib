@@ -51,6 +51,22 @@ namespace
 
 typedef kainjow::mustache::data MustacheData;
 typedef kainjow::mustache::list BookData;
+typedef kainjow::mustache::list IllustrationInfo;
+
+IllustrationInfo getBookIllustrationInfo(const Book& book)
+{
+    kainjow::mustache::list illustrations;
+    if ( book.isPathValid() ) {
+      for ( auto illustration_size : zim::Archive(book.getPath()).getIllustrationSizes() ) {
+        illustrations.push_back(kainjow::mustache::object{
+          {"icon_width", to_string(illustration_size)},
+          {"icon_height", to_string(illustration_size)},
+          {"icon_scale", "1"},
+        });
+      }
+    }
+    return illustrations;
+}
 
 BookData getBookData(const Library* library, const std::vector<std::string>& bookIds)
 {
@@ -77,6 +93,7 @@ BookData getBookData(const Library* library, const std::vector<std::string>& boo
       {"publisher_name", book.getPublisher()},
       {"url", bookUrl},
       {"size", to_string(book.getSize())},
+      {"icons", getBookIllustrationInfo(book)},
     });
   }
 
