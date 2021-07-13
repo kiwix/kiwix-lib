@@ -617,10 +617,10 @@ std::string maskVariableOPDSFeedData(std::string s)
     "  <entry>\n"                                                       \
     "    <id>urn:uuid:charlesray</id>\n"                                \
     "    <title>Charles, Ray</title>\n"                                 \
-    "    <summary>Wikipedia articles about Ray Charles</summary>\n"    \
-    "    <language>eng</language>\n"                                    \
+    "    <summary>Wikipedia articles about Ray Charles</summary>\n"     \
+    "    <language>fra</language>\n"                                    \
     "    <updated>YYYY-MM-DDThh:mm:ssZ</updated>\n"                     \
-    "    <name>wikipedia_en_ray_charles</name>\n"                       \
+    "    <name>wikipedia_fr_ray_charles</name>\n"                       \
     "    <flavour></flavour>\n"                                         \
     "    <category>jazz</category>\n"                                   \
     "    <tags>unittest;wikipedia;_category:jazz;_pictures:no;_videos:no;_details:no;_ftindex:yes</tags>\n" \
@@ -666,9 +666,9 @@ std::string maskVariableOPDSFeedData(std::string s)
     "    <id>urn:uuid:raycharles_uncategorized</id>\n"                  \
     "    <title>Ray (uncategorized) Charles</title>\n"                  \
     "    <summary>No category is assigned to this library entry.</summary>\n" \
-    "    <language>eng</language>\n"                                    \
+    "    <language>rus</language>\n"                                    \
     "    <updated>YYYY-MM-DDThh:mm:ssZ</updated>\n"                     \
-    "    <name>wikipedia_en_ray_charles</name>\n"                       \
+    "    <name>wikipedia_ru_ray_charles</name>\n"                       \
     "    <flavour></flavour>\n"                                         \
     "    <category></category>\n"                                \
     "    <tags>unittest;wikipedia;_pictures:no;_videos:no;_details:no</tags>\n" \
@@ -942,6 +942,15 @@ TEST_F(LibraryServerTest, catalog_v2_root)
     <id>12345678-90ab-cdef-1234-567890abcdef</id>
     <content type="text">List of all categories in this catalog.</content>
   </entry>
+  <entry>
+    <title>List of languages</title>
+    <link rel="subsection"
+          href="/catalog/v2/languages"
+          type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+    <content type="text">List of all languages in this catalog.</content>
+  </entry>
 </feed>
 )";
   EXPECT_EQ(maskVariableOPDSFeedData(r->body), expected_output);
@@ -999,6 +1008,59 @@ TEST_F(LibraryServerTest, catalog_v2_categories)
     <updated>YYYY-MM-DDThh:mm:ssZ</updated>
     <id>12345678-90ab-cdef-1234-567890abcdef</id>
     <content type="text">All entries with category of 'wikipedia'.</content>
+  </entry>
+</feed>
+)";
+  EXPECT_EQ(maskVariableOPDSFeedData(r->body), expected_output);
+}
+
+TEST_F(LibraryServerTest, catalog_v2_languages)
+{
+  const auto r = zfs1_->GET("/catalog/v2/languages");
+  EXPECT_EQ(r->status, 200);
+  const char expected_output[] = R"(<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:opds="https://specs.opds.io/opds-1.2">
+  <id>12345678-90ab-cdef-1234-567890abcdef</id>
+  <link rel="self"
+        href="/catalog/v2/languages"
+        type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <link rel="start"
+        href="/catalog/v2/root.xml"
+        type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
+  <title>List of languages</title>
+  <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+
+  <entry>
+    <title>English</title>
+    <dc:language>eng</dc:language>
+    <thr:count>1</thr:count>
+    <link rel="subsection"
+          href="/catalog/v2/entries?lang=eng"
+          type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+  </entry>
+  <entry>
+    <title>français</title>
+    <dc:language>fra</dc:language>
+    <thr:count>1</thr:count>
+    <link rel="subsection"
+          href="/catalog/v2/entries?lang=fra"
+          type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
+  </entry>
+  <entry>
+    <title>русский</title>
+    <dc:language>rus</dc:language>
+    <thr:count>1</thr:count>
+    <link rel="subsection"
+          href="/catalog/v2/entries?lang=rus"
+          type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+    <updated>YYYY-MM-DDThh:mm:ssZ</updated>
+    <id>12345678-90ab-cdef-1234-567890abcdef</id>
   </entry>
 </feed>
 )";

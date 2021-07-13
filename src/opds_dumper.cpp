@@ -22,6 +22,7 @@
 
 #include "kiwixlib-resources.h"
 #include <mustache.hpp>
+#include <unicode/locid.h>
 
 #include "tools/stringTools.h"
 #include "tools/otherTools.h"
@@ -83,6 +84,15 @@ BookData getBookData(const Library* library, const std::vector<std::string>& boo
   return bookData;
 }
 
+std::string getLanguageSelfName(const std::string& lang) {
+  const icu::Locale locale(lang.c_str());
+  icu::UnicodeString ustring;
+  locale.getDisplayLanguage(locale, ustring);
+  std::string result;
+  ustring.toUTF8String(result);
+  return result;
+};
+
 } // unnamed namespace
 
 string OPDSDumper::dumpOPDSFeed(const std::vector<std::string>& bookIds, const std::string& query) const
@@ -121,11 +131,11 @@ string OPDSDumper::dumpOPDSFeedV2(const std::vector<std::string>& bookIds, const
   return render_template(RESOURCE::templates::catalog_v2_entries_xml, template_data);
 }
 
-std::string OPDSDumper::categoriesOPDSFeed(const std::vector<std::string>& categories) const
+std::string OPDSDumper::categoriesOPDSFeed() const
 {
   const auto now = gen_date_str();
   kainjow::mustache::list categoryData;
-  for ( const auto& category : categories ) {
+  for ( const auto& category : library->getBooksCategories() ) {
     const auto urlencodedCategoryName = urlEncode(category);
     categoryData.push_back(kainjow::mustache::object{
       {"name", category},
@@ -142,6 +152,34 @@ std::string OPDSDumper::categoriesOPDSFeed(const std::vector<std::string>& categ
                {"endpoint_root", rootLocation + "/catalog/v2"},
                {"feed_id", gen_uuid(libraryId + "/categories")},
                {"categories", categoryData }
+             }
+  );
+}
+
+std::string OPDSDumper::languagesOPDSFeed() const
+{
+  const auto now = gen_date_str();
+  kainjow::mustache::list languageData;
+  for ( const auto& langAndBookCount : library->getBooksLanguagesWithCounts() ) {
+    const std::string languageCode = langAndBookCount.first;
+    const int bookCount = langAndBookCount.second;
+    const auto languageSelfName = getLanguageSelfName(languageCode);
+    languageData.push_back(kainjow::mustache::object{
+      {"lang_code",  languageCode},
+      {"lang_self_name", languageSelfName},
+      {"book_count", to_string(bookCount)},
+      {"updated", now},
+      {"id", gen_uuid(libraryId + "/languages/" + languageCode)}
+    });
+  }
+
+  return render_template(
+             RESOURCE::templates::catalog_v2_languages_xml,
+             kainjow::mustache::object{
+               {"date", now},
+               {"endpoint_root", rootLocation + "/catalog/v2"},
+               {"feed_id", gen_uuid(libraryId + "/languages")},
+               {"languages", languageData }
              }
   );
 }

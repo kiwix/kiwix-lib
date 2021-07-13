@@ -59,6 +59,8 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2(const RequestContext
     return handle_catalog_v2_entries(request);
   } else if (url == "categories") {
     return handle_catalog_v2_categories(request);
+  } else if (url == "languages") {
+    return handle_catalog_v2_languages(request);
   } else {
     return Response::build_404(*this, request, "", "");
   }
@@ -74,7 +76,8 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2_root(const RequestCo
                {"endpoint_root", m_root + "/catalog/v2"},
                {"feed_id", gen_uuid(m_library_id)},
                {"all_entries_feed_id", gen_uuid(m_library_id + "/entries")},
-               {"category_list_feed_id", gen_uuid(m_library_id + "/categories")}
+               {"category_list_feed_id", gen_uuid(m_library_id + "/categories")},
+               {"language_list_feed_id", gen_uuid(m_library_id + "/languages")}
              },
              "application/atom+xml;profile=opds-catalog;kind=navigation"
   );
@@ -101,7 +104,19 @@ std::unique_ptr<Response> InternalServer::handle_catalog_v2_categories(const Req
   opdsDumper.setLibraryId(m_library_id);
   return ContentResponse::build(
              *this,
-             opdsDumper.categoriesOPDSFeed(mp_library->getBooksCategories()),
+             opdsDumper.categoriesOPDSFeed(),
+             "application/atom+xml;profile=opds-catalog;kind=navigation"
+  );
+}
+
+std::unique_ptr<Response> InternalServer::handle_catalog_v2_languages(const RequestContext& request)
+{
+  OPDSDumper opdsDumper(mp_library);
+  opdsDumper.setRootLocation(m_root);
+  opdsDumper.setLibraryId(m_library_id);
+  return ContentResponse::build(
+             *this,
+             opdsDumper.languagesOPDSFeed(),
              "application/atom+xml;profile=opds-catalog;kind=navigation"
   );
 }

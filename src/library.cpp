@@ -208,23 +208,36 @@ bool Library::writeBookmarksToFile(const std::string& path) const
   return writeTextFile(path, dumper.dumpLibXMLBookmark());
 }
 
-std::vector<std::string> Library::getBooksLanguages() const
+Library::AttributeCounts Library::getBookAttributeCounts(BookStrPropMemFn p) const
 {
-  std::vector<std::string> booksLanguages;
-  std::map<std::string, bool> booksLanguagesMap;
+  AttributeCounts propValueCounts;
 
-  for (auto& pair: m_books) {
-    auto& book = pair.second;
-    auto& language = book.getLanguage();
-    if (booksLanguagesMap.find(language) == booksLanguagesMap.end()) {
-      if (book.getOrigId().empty()) {
-        booksLanguagesMap[language] = true;
-        booksLanguages.push_back(language);
-      }
+  for (const auto& pair: m_books) {
+    const auto& book = pair.second;
+    if (book.getOrigId().empty()) {
+      propValueCounts[(book.*p)()] += 1;
     }
   }
+  return propValueCounts;
+}
 
-  return booksLanguages;
+std::vector<std::string> Library::getBookPropValueSet(BookStrPropMemFn p) const
+{
+  std::vector<std::string> result;
+  for ( const auto& kv : getBookAttributeCounts(p) ) {
+    result.push_back(kv.first);
+  }
+  return result;
+}
+
+std::vector<std::string> Library::getBooksLanguages() const
+{
+  return getBookPropValueSet(&Book::getLanguage);
+}
+
+Library::AttributeCounts Library::getBooksLanguagesWithCounts() const
+{
+  return getBookAttributeCounts(&Book::getLanguage);
 }
 
 std::vector<std::string> Library::getBooksCategories() const
@@ -244,40 +257,12 @@ std::vector<std::string> Library::getBooksCategories() const
 
 std::vector<std::string> Library::getBooksCreators() const
 {
-  std::vector<std::string> booksCreators;
-  std::map<std::string, bool> booksCreatorsMap;
-
-  for (auto& pair: m_books) {
-    auto& book = pair.second;
-    auto& creator = book.getCreator();
-    if (booksCreatorsMap.find(creator) == booksCreatorsMap.end()) {
-      if (book.getOrigId().empty()) {
-        booksCreatorsMap[creator] = true;
-        booksCreators.push_back(creator);
-      }
-    }
-  }
-
-  return booksCreators;
+  return getBookPropValueSet(&Book::getCreator);
 }
 
 std::vector<std::string> Library::getBooksPublishers() const
 {
-  std::vector<std::string> booksPublishers;
-  std::map<std::string, bool> booksPublishersMap;
-
-  for (auto& pair:m_books) {
-    auto& book = pair.second;
-    auto& publisher = book.getPublisher();
-    if (booksPublishersMap.find(publisher) == booksPublishersMap.end()) {
-      if (book.getOrigId().empty()) {
-        booksPublishersMap[publisher] = true;
-        booksPublishers.push_back(publisher);
-      }
-    }
-  }
-
-  return booksPublishers;
+  return getBookPropValueSet(&Book::getPublisher);
 }
 
 const std::vector<kiwix::Bookmark> Library::getBookmarks(bool onlyValidBookmarks) const

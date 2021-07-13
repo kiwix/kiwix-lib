@@ -154,6 +154,7 @@ class Library
 
  public:
   typedef std::vector<std::string> BookIdCollection;
+  typedef std::map<std::string, int> AttributeCounts;
 
  public:
   Library();
@@ -241,6 +242,13 @@ class Library
    * @return A list of languages.
    */
   std::vector<std::string> getBooksLanguages() const;
+
+  /**
+   * Get all languagues of the books in the library with counts.
+   *
+   * @return A list of languages with the count of books in each language.
+   */
+  AttributeCounts getBooksLanguagesWithCounts() const;
 
   /**
    * Get all categories of the books in the library.
@@ -341,7 +349,12 @@ class Library
   friend class OPDSDumper;
   friend class libXMLDumper;
 
+private: // types
+  typedef const std::string& (Book::*BookStrPropMemFn)() const;
+
 private: // functions
+  AttributeCounts getBookAttributeCounts(BookStrPropMemFn p) const;
+  std::vector<std::string> getBookPropValueSet(BookStrPropMemFn p) const;
   BookIdCollection filterViaBookDB(const Filter& filter) const;
   void updateBookDB(const Book& book);
 };

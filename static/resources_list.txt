@@ -48,5 +48,6 @@ templates/catalog_entries.xml
 templates/catalog_v2_root.xml
 templates/catalog_v2_entries.xml
 templates/catalog_v2_categories.xml
+templates/catalog_v2_languages.xml
 opensearchdescription.xml
 catalog_v2_searchdescription.xml
