@@ -26,6 +26,10 @@ namespace pugi {
 class xml_node;
 }
 
+namespace zim {
+class Archive;
+}
+
 namespace kiwix
 {
 
@@ -43,6 +47,7 @@ class Book
 
   bool update(const Book& other);
   void update(const Reader& reader);
+  void update(const zim::Archive& archive);
   void updateFromXml(const pugi::xml_node& node, const std::string& baseDir);
   void updateFromOpds(const pugi::xml_node& node, const std::string& urlHost);
   std::string getHumanReadableIdFromPath() const;

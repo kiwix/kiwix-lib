@@ -27,6 +27,9 @@
 #include "tools/otherTools.h"
 #include "tools/stringTools.h"
 #include "tools/pathTools.h"
+#include "tools/archiveTools.h"
+
+#include <zim/archive.h>
 
 #include <pugixml.hpp>
 
@@ -80,26 +83,28 @@ bool Book::update(const kiwix::Book& other)
 
 void Book::update(const kiwix::Reader& reader)
 {
-  m_path = reader.getZimFilePath();
-  m_pathValid = true;
-  m_id = reader.getId();
-  m_title = reader.getTitle();
-  m_description = reader.getDescription();
-  m_language = reader.getLanguage();
-  m_creator = reader.getCreator();
-  m_publisher = reader.getPublisher();
-  m_date = reader.getDate();
-  m_name = reader.getName();
-  m_flavour = reader.getFlavour();
-  m_tags = reader.getTags();
-  m_category = getCategoryFromTags();
-  m_origId = reader.getOrigId();
-  m_articleCount = reader.getArticleCount();
-  m_mediaCount = reader.getMediaCount();
-  m_size = static_cast<uint64_t>(reader.getFileSize()) << 10;
-  m_pathValid = true;
+  update(*reader.getZimArchive());
+}
 
-  reader.getFavicon(m_favicon, m_faviconMimeType);
+void Book::update(const zim::Archive& archive) {
+  m_path = archive.getFilename();
+  m_pathValid = true;
+  m_id = getArchiveId(archive);
+  m_title = getArchiveTitle(archive);
+  m_description = getMetaDescription(archive);
+  m_language = getMetaLanguage(archive);
+  m_creator = getMetaCreator(archive);
+  m_publisher = getMetaPublisher(archive);
+  m_date = getMetaDate(archive);
+  m_name = getMetaName(archive);
+  m_flavour = getMetaFlavour(archive);
+  m_tags = getMetaTags(archive);
+  m_category = getCategoryFromTags();
+  m_articleCount = archive.getArticleCount();
+  m_mediaCount = getArchiveMediaCount(archive);
+  m_size = static_cast<uint64_t>(getArchiveFileSize(archive)) << 10;
+
+  getArchiveFavicon(archive, m_favicon, m_faviconMimeType);
 }
 
 #define ATTR(name) node.attribute(name).value()

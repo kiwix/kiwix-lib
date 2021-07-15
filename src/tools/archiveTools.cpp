@@ -69,18 +69,6 @@ std::string getMetaTags(const zim::Archive& archive, bool original) {
   return join(tags, ";");
 }
 
-bool getArchiveFavicon(const zim::Archive& archive,
-                           std::string& content, std::string& mimeType){
-  try {
-    auto item = archive.getIllustrationItem();
-    content = item.getData();
-    mimeType = item.getMimetype();
-    return true;
-  } catch(zim::EntryNotFound& e) {};
-
-  return false;
-}
-
 std::string getMetaLanguage(const zim::Archive& archive) {
   return getMetadata(archive, "Language");
 }
@@ -101,6 +89,46 @@ std::string getMetaPublisher(const zim::Archive& archive) {
   return getMetadata(archive, "Publisher");
 }
 
+std::string getMetaFlavour(const zim::Archive& archive) {
+  return getMetadata(archive, "Flavour");
+}
+
+std::string getArchiveId(const zim::Archive& archive) {
+  return (std::string) archive.getUuid();
+}
+
+bool getArchiveFavicon(const zim::Archive& archive,
+                           std::string& content, std::string& mimeType){
+  try {
+    auto item = archive.getIllustrationItem();
+    content = item.getData();
+    mimeType = item.getMimetype();
+    return true;
+  } catch(zim::EntryNotFound& e) {};
+
+  return false;
+}
+
+// should this be in libzim
+unsigned int getArchiveMediaCount(const zim::Archive& archive) {
+  std::map<const std::string, unsigned int> counterMap = parseArchiveCounter(archive);
+  unsigned int counter = 0;
+
+  for (auto &pair:counterMap) {
+    if (startsWith(pair.first, "image/") ||
+        startsWith(pair.first, "video/") ||
+        startsWith(pair.first, "audio/")) {
+      counter += pair.second;
+    }
+  }
+
+  return counter;
+}
+
+unsigned int getArchiveFileSize(const zim::Archive& archive) {
+  return archive.getFilesize() / 1024;
+}
+
 zim::Item getFinalItem(const zim::Archive& archive, const zim::Entry& entry)
 {
   return entry.getItem(true);
@@ -116,6 +144,15 @@ zim::Entry getEntryFromPath(const zim::Archive& archive, const std::string& path
     }
   }
   throw zim::EntryNotFound("Cannot find entry for non empty path");
+}
+
+MimeCounterType parseArchiveCounter(const zim::Archive& archive) {
+  try {
+    auto counterContent = archive.getMetadata("Counter");
+    return parseMimetypeCounter(counterContent);
+  } catch (zim::EntryNotFound& e) {
+    return {};
+  }
 }
 
 } // kiwix

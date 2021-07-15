@@ -29,44 +29,6 @@
 #include "tools/otherTools.h"
 #include "tools/archiveTools.h"
 
-inline char hi(char v)
-{
-  char hex[] = "0123456789abcdef";
-  return hex[(v >> 4) & 0xf];
-}
-
-inline char lo(char v)
-{
-  char hex[] = "0123456789abcdef";
-  return hex[v & 0xf];
-}
-
-std::string hexUUID(std::string in)
-{
-  std::ostringstream out;
-  for (unsigned n = 0; n < 4; ++n) {
-    out << hi(in[n]) << lo(in[n]);
-  }
-  out << '-';
-  for (unsigned n = 4; n < 6; ++n) {
-    out << hi(in[n]) << lo(in[n]);
-  }
-  out << '-';
-  for (unsigned n = 6; n < 8; ++n) {
-    out << hi(in[n]) << lo(in[n]);
-  }
-  out << '-';
-  for (unsigned n = 8; n < 10; ++n) {
-    out << hi(in[n]) << lo(in[n]);
-  }
-  out << '-';
-  for (unsigned n = 10; n < 16; ++n) {
-    out << hi(in[n]) << lo(in[n]);
-  }
-  std::string op = out.str();
-  return op;
-}
-
 namespace kiwix
 {
 /* Constructor */
@@ -119,12 +81,7 @@ zim::Archive* Reader::getZimArchive() const
 
 MimeCounterType Reader::parseCounterMetadata() const
 {
-  try {
-    auto counterContent = zimArchive->getMetadata("Counter");
-    return parseMimetypeCounter(counterContent);
-  } catch (zim::EntryNotFound& e) {
-    return {};
-  }
+  return kiwix::parseArchiveCounter(*zimArchive);
 }
 
 /* Get the count of articles which can be indexed/displayed */
@@ -146,19 +103,7 @@ unsigned int Reader::getArticleCount() const
 /* Get the count of medias content in the ZIM file */
 unsigned int Reader::getMediaCount() const
 {
-  std::map<const std::string, unsigned int> counterMap
-      = this->parseCounterMetadata();
-  unsigned int counter = 0;
-
-  for (auto &pair:counterMap) {
-    if (startsWith(pair.first, "image/") ||
-        startsWith(pair.first, "video/") ||
-        startsWith(pair.first, "audio/")) {
-      counter += pair.second;
-    }
-  }
-
-  return counter;
+  return kiwix::getArchiveMediaCount(*zimArchive);
 }
 
 /* Get the total of all items of a ZIM file, redirects included */
@@ -170,9 +115,7 @@ unsigned int Reader::getGlobalCount() const
 /* Return the UID of the ZIM file */
 string Reader::getId() const
 {
-  std::ostringstream s;
-  s << zimArchive->getUuid();
-  return s.str();
+  return kiwix::getArchiveId(*zimArchive);
 }
 
 Entry Reader::getRandomPage() const
@@ -281,7 +224,7 @@ string Reader::getRelation() const
 
 string Reader::getFlavour() const
 {
-  METADATA("Flavour")
+  return kiwix::getMetaFlavour(*zimArchive);
 }
 
 string Reader::getSource() const
@@ -294,31 +237,6 @@ string Reader::getScraper() const
   METADATA("Scraper")
 }
 #undef METADATA
-
-string Reader::getOrigId() const
-{
-  string value;
-  this->getMetadata("startfileuid", value);
-  if (value.empty()) {
-    return "";
-  }
-  std::string id = value;
-  std::string origID;
-  std::string temp = "";
-  unsigned int k = 0;
-  char tempArray[16] = "";
-  for (unsigned int i = 0; i < id.size(); i++) {
-    if (id[i] == '\n') {
-      tempArray[k] = atoi(temp.c_str());
-      temp = "";
-      k++;
-    } else {
-      temp += id[i];
-    }
-  }
-  origID = hexUUID(tempArray);
-  return origID;
-}
 
 Entry Reader::getEntryFromPath(const std::string& path) const
 {
@@ -546,7 +464,7 @@ bool Reader::isCorrupted() const
 /* Return the file size, works also for splitted files */
 unsigned int Reader::getFileSize() const
 {
-  return zimArchive->getFilesize() / 1024;
+  return kiwix::getArchiveFileSize(*zimArchive);
 }
 
 }

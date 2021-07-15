@@ -215,8 +215,8 @@ bool Manager::readBookFromPath(const std::string& path, kiwix::Book* book)
     tmp_path = computeAbsolutePath(getCurrentDirectory(), path);
   }
   try {
-    kiwix::Reader reader(tmp_path);
-    book->update(reader);
+    zim::Archive archive(tmp_path);
+    book->update(archive);
     book->setPathValid(true);
   } catch (const std::exception& e) {
     book->setPathValid(false);

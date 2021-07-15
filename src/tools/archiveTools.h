@@ -21,6 +21,7 @@
 #define KIWIX_ARCHIVETOOLS_H
 
 #include <zim/archive.h>
+#include <tools/otherTools.h>
 
 /**
  * This file contains all the functions that would make handling data related to
@@ -33,15 +34,26 @@ namespace kiwix
     std::string getArchiveTitle(const zim::Archive& archive);
     std::string getMetaDescription(const zim::Archive& archive);
     std::string getMetaTags(const zim::Archive& archive, bool original = false);
-    bool getArchiveFavicon(const zim::Archive& archive,
-                           std::string& content, std::string& mimeType);
     std::string getMetaLanguage(const zim::Archive& archive);
     std::string getMetaName(const zim::Archive& archive);
     std::string getMetaDate(const zim::Archive& archive);
     std::string getMetaCreator(const zim::Archive& archive);
     std::string getMetaPublisher(const zim::Archive& archive);
+    std::string getMetaFlavour(const zim::Archive& archive);
+    std::string getArchiveId(const zim::Archive& archive);
+
+    bool getArchiveFavicon(const zim::Archive& archive,
+                           std::string& content, std::string& mimeType);
+
+    unsigned int getArchiveMediaCount(const zim::Archive& archive);
+    unsigned int getArchiveFileSize(const zim::Archive& archive);
+
     zim::Item getFinalItem(const zim::Archive& archive, const zim::Entry& entry);
+
     zim::Entry getEntryFromPath(const zim::Archive& archive, const std::string& path);
+
+    MimeCounterType parseArchiveCounter(const zim::Archive& archive);
+
 }
 
 #endif
