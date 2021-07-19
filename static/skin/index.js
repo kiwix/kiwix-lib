@@ -16,6 +16,8 @@
     let noResultInjected = false;
     let filters = getCookie(filterCookieName);
     let params = new URLSearchParams(window.location.search || filters || '');
+    let noFilter = params.has('nofilter') && params.get('nofilter');
+    let inIframe = false;
     let timer;
 
     function queryUrlBuilder() {
@@ -101,7 +103,7 @@
             <div class='book__description' title='${description}'>${description}</div>
             <div class='book__languageTag'>${language.substr(0, 2).toUpperCase()}</div>
             <div class='book__tags'><div class="book__tags--wrapper">${tagHtml}</div></div>
-            <div class='book__links'> <a href="${link}" data-hover="Preview">Preview</a>${downloadLink ? `&nbsp;|&nbsp;<span class="download" data-link=${downloadLink} class="modal-button">Download</span>` : ''} </div></div>`;
+            <div class='book__links'> ${!inIframe ? `<a href="${link}" data-hover="Preview">Preview</a>` : ''}${downloadLink ? `${!inIframe ? '&nbsp;|&nbsp;' : ''}<span class="download" data-link=${downloadLink} class="modal-button">Download</span>` : ''} </div></div>`;
         return divTag;
     }
 
@@ -336,6 +338,14 @@
     window.addEventListener('scroll', loadSubset);
 
     window.onload = async () => {
+        if (noFilter) {
+            document.getElementById('kiwixNav').remove();
+        }
+        if (window.location !== window.parent.location) {
+            document.getElementById('kiwixFooter').innerHTML = '';
+            document.getElementById('kiwixHomeBody').style.padding = '20px';
+            inIframe = true;
+        }
         iso = new Isotope( '.book__list', {
             itemSelector: '.book',
             getSortData:{
@@ -351,7 +361,7 @@
                 rowHeight: '.book'
             }
         });
-        footer = document.getElementById('kiwixfooter');
+        footer = document.getElementById('kiwixFooter');
         fadeOutDiv = document.getElementById('fadeOut');
         loader = document.querySelector('.loader');
         await loadAndDisplayBooks();
@@ -365,7 +375,7 @@
         }
         params.forEach((value, key) => {document.getElementsByName(key)[0].value = value});
         document.getElementById('kiwixSearchForm').onsubmit = (event) => {event.preventDefault()};
-        if (!window.location.search) {
+        if (!window.location.search && !inIframe) {
             const browserLang = navigator.language.split('-')[0];
             const langFilter = document.getElementById('languageFilter');
             langFilter.value = browserLang.length === 3 ? browserLang : iso6391To3[browserLang];

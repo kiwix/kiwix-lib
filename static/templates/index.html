@@ -45,7 +45,7 @@
     <script type="text/javascript" src="{{root}}/skin/index.js" defer></script>
   </head>
   <body>
-    <div class='kiwixNav'>
+    <div id='kiwixNav' class='kiwixNav'>
       <div class="kiwixNav__filters">
         <div class="kiwixNav__select">
           <select name="lang" id="languageFilter" class='kiwixNav__kiwixFilter filter'>
@@ -63,13 +63,13 @@
         <input type="submit" class="searchButton" value="Search"/>
       </form>
     </div>
-    <div class="kiwixHomeBody">
+    <div id="kiwixHomeBody" class="kiwixHomeBody">
       <h3 class="kiwixHomeBody__results"></h3>
       <div class="book__list"></div>
       <div id="fadeOut" class="fadeOut"></div>
     </div>
     <div class="loader" style="position: absolute; top: 50%"><div class="loader-spinner"></div></div>
-    <div id="kiwixfooter" class="kiwixfooter">Powered by&nbsp;<a href="https://kiwix.org">Kiwix</a></div>
+    <div id="kiwixFooter" class="kiwixfooter">Powered by&nbsp;<a href="https://kiwix.org">Kiwix</a></div>
   </body>
   <script>
     function closeModal() {
